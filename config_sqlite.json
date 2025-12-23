@@ -1,0 +1,44 @@
+{
+  "database": {
+    "db_type": "sqlite",
+    "sqlite_path": "data/memory_price_monitor.db"
+  },
+  "redis": {
+    "host": "localhost",
+    "port": 6379,
+    "db": 0,
+    "password": null
+  },
+  "crawler": {
+    "user_agents": [
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    ],
+    "request_timeout": 30,
+    "retry_attempts": 3,
+    "retry_delay": 1.0,
+    "rate_limit_delay": 2.0,
+    "concurrent_limit": 5
+  },
+  "notification": {
+    "wechat_method": "serverchan",
+    "serverchan_key": null,
+    "email_smtp_host": "smtp.gmail.com",
+    "email_smtp_port": 587,
+    "email_username": null,
+    "email_password": null,
+    "email_recipients": [],
+    "retry_attempts": 3,
+    "retry_delay": 5.0,
+    "user_preferences": {}
+  },
+  "scheduler": {
+    "daily_crawl_hour": 2,
+    "weekly_report_day": 0,
+    "weekly_report_hour": 9,
+    "timezone": "Asia/Shanghai"
+  },
+  "log_level": "INFO",
+  "data_retention_days": 365
+}

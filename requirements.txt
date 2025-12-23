@@ -1,0 +1,54 @@
+# Core dependencies
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+psycopg2-binary>=2.9.0  # PostgreSQL support (optional)
+redis>=4.5.0
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Scheduling
+APScheduler>=3.10.0
+schedule>=1.2.0
+psutil>=5.9.0
+
+# Chart generation
+matplotlib>=3.7.0
+plotly>=5.14.0
+kaleido>=0.2.1  # For plotly static image export
+
+# Configuration and validation
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+jsonschema>=4.17.0
+
+# Logging
+structlog>=23.1.0
+
+# HTTP client enhancements
+httpx>=0.24.0
+aiohttp>=3.8.0
+
+# Browser automation for anti-crawler evasion
+playwright>=1.40.0
+playwright-stealth>=1.0.6
+
+# Data serialization
+orjson>=3.9.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+hypothesis>=6.82.0
+
+# Development tools
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.4.0
+pre-commit>=3.3.0
+
+# Optional: Performance monitoring
+memory-profiler>=0.61.0
