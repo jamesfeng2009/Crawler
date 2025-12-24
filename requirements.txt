@@ -30,6 +30,7 @@ structlog>=23.1.0
 # HTTP client enhancements
 httpx>=0.24.0
 aiohttp>=3.8.0
+requests[socks]>=2.31.0  # SOCKS proxy support
 
 # Browser automation for anti-crawler evasion
 playwright>=1.40.0

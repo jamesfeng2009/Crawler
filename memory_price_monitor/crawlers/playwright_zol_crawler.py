@@ -26,6 +26,7 @@ except ImportError:
 from memory_price_monitor.crawlers.base import BaseCrawler, RawProduct, PricePoint
 from memory_price_monitor.utils.errors import CrawlerError
 from memory_price_monitor.utils.logging import get_business_logger
+from memory_price_monitor.utils.proxy_pool import get_proxy_pool
 
 
 logger = get_business_logger('crawler_zol')
@@ -69,6 +70,12 @@ class PlaywrightZOLCrawler(BaseCrawler):
         self.min_delay = self.config.get('min_delay', 2.0)
         self.max_delay = self.config.get('max_delay', 5.0)
         self.scroll_delay = self.config.get('scroll_delay', 1.0)
+        
+        # Proxy settings
+        self.use_proxy = self.config.get('use_proxy', False)
+        self.proxy_pool = None
+        if self.use_proxy:
+            self.proxy_pool = get_proxy_pool()
         
         # Browser instances
         self.playwright = None
@@ -120,14 +127,14 @@ class PlaywrightZOLCrawler(BaseCrawler):
                 # Create browser context with realistic settings
                 user_agent = random.choice(self.user_agents)
                 
-                self.context = self.browser.new_context(
-                    user_agent=user_agent,
-                    viewport={'width': self.viewport_width, 'height': self.viewport_height},
-                    locale='zh-CN',
-                    timezone_id='Asia/Shanghai',
-                    permissions=['geolocation'],
-                    geolocation={'latitude': 39.9042, 'longitude': 116.4074},  # Beijing
-                    extra_http_headers={
+                context_options = {
+                    'user_agent': user_agent,
+                    'viewport': {'width': self.viewport_width, 'height': self.viewport_height},
+                    'locale': 'zh-CN',
+                    'timezone_id': 'Asia/Shanghai',
+                    'permissions': ['geolocation'],
+                    'geolocation': {'latitude': 39.9042, 'longitude': 116.4074},  # Beijing
+                    'extra_http_headers': {
                         'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
                         'Accept-Encoding': 'gzip, deflate, br',
                         'DNT': '1',
@@ -137,7 +144,22 @@ class PlaywrightZOLCrawler(BaseCrawler):
                         'Sec-Fetch-User': '?1',
                         'Upgrade-Insecure-Requests': '1'
                     }
-                )
+                }
+                
+                # 添加代理配置
+                if self.use_proxy and self.proxy_pool:
+                    proxy_info = self.proxy_pool.get_next_proxy()
+                    if proxy_info:
+                        context_options['proxy'] = {
+                            'server': f"{proxy_info.protocol}://{proxy_info.host}:{proxy_info.port}"
+                        }
+                        if proxy_info.username and proxy_info.password:
+                            context_options['proxy']['username'] = proxy_info.username
+                            context_options['proxy']['password'] = proxy_info.password
+                        
+                        self.logger.info(f"使用代理: {proxy_info.host}:{proxy_info.port}")
+                
+                self.context = self.browser.new_context(**context_options)
                 
                 # Set default timeout
                 self.context.set_default_timeout(self.page_timeout)
